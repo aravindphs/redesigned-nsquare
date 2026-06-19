@@ -9,6 +9,7 @@ import {
   UNIT_RATE,
   SUBSIDY,
 } from '../../constants/calculator';
+import PopupForm from '../ui/PopupForm';
 
 function roundToHalf(n) {
   return Math.max(1, Math.round(n * 2) / 2);
@@ -55,6 +56,7 @@ export default function Calculator() {
   const [units, setUnits] = useState('');
   const [propertyType, setPropertyType] = useState('Residential');
   const [showResults, setShowResults] = useState(false);
+  const [showCostPopup, setShowCostPopup] = useState(false);
 
   const results = useMemo(() => {
     const rawUnits = inputMode === 'bill'
@@ -212,7 +214,19 @@ export default function Calculator() {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
                   <ResultCard label="Recommended System" value={`${results.systemKw} kW`} />
-                  <ResultCard label="Total System Cost" value={formatINR(results.totalCost)} />
+                  {/* Total cost value kept hidden — revealed only after the user shares contact details */}
+                  <button
+                    type="button"
+                    onClick={() => setShowCostPopup(true)}
+                    className="rounded-xl p-4 bg-gray-50 text-left hover:bg-green-50 transition-colors group"
+                  >
+                    <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
+                      Total System Cost
+                    </p>
+                    <p className="text-base font-bold mt-1 text-[#16A34A] underline underline-offset-4 decoration-2 group-hover:text-green-700">
+                      Get total system cost →
+                    </p>
+                  </button>
                   {results.subsidy > 0 ? (
                     <ResultCard label="PM Surya Ghar Subsidy" value={`-${formatINR(results.subsidy)}`} highlight />
                   ) : (
@@ -282,6 +296,8 @@ export default function Calculator() {
           </motion.div>
         </div>
       </div>
+
+      {showCostPopup && <PopupForm onClose={() => setShowCostPopup(false)} />}
     </section>
   );
 }

@@ -118,29 +118,75 @@ export default function HowSolarWorks() {
           </div>
         </div>
 
-        {/* Mobile: stacked vertically */}
-        <div className="md:hidden flex flex-col gap-4 max-w-xs mx-auto">
-          {stages.map((stage, i) => (
-            <motion.div
-              key={stage.id}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-              className="flex items-center gap-4"
-            >
-              <div className="w-14 h-14 rounded-full bg-green-50 border-2 border-[#16A34A] flex items-center justify-center text-2xl flex-shrink-0">
-                {stage.emoji}
-              </div>
-              <div className="flex-1">
-                <p className="font-semibold text-gray-900">{stage.label}</p>
-                <p className="text-xs text-gray-500">{stage.sublabel}</p>
-              </div>
-              {i < stages.length - 1 && (
-                <div className="absolute left-7 mt-14 w-0.5 h-4 bg-[#16A34A]" style={{ position: 'relative', left: '-100px' }} />
-              )}
-            </motion.div>
-          ))}
+        {/* Mobile: vertical SVG diagram with traveling green pulse */}
+        <div className="md:hidden mx-auto" style={{ maxWidth: 320 }}>
+          <svg width="320" height="620" viewBox="0 0 320 620" className="w-full">
+            {/* Vertical connection line down the center-left rail */}
+            {stages.slice(0, -1).map((_, i) => (
+              <motion.line
+                key={i}
+                x1="50" y1={70 + i * 130}
+                x2="50" y2={130 + i * 130}
+                stroke="#16A34A"
+                strokeWidth="2"
+                strokeDasharray="6 3"
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.15 }}
+              />
+            ))}
+
+            {/* Animated traveling dot running top → bottom, looping */}
+            <motion.circle
+              r="6"
+              cx="50"
+              fill="#16A34A"
+              style={{ filter: 'drop-shadow(0 0 6px #16A34A)' }}
+              animate={{ cy: [50, 180, 310, 440, 570] }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                repeatDelay: 0.5,
+                ease: 'linear',
+                times: [0, 0.25, 0.5, 0.75, 1],
+              }}
+            />
+
+            {/* Stage nodes */}
+            {stages.map((stage, i) => {
+              const cy = 50 + i * 130;
+              return (
+                <motion.g
+                  key={stage.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.12, type: 'spring' }}
+                >
+                  <circle cx="50" cy={cy} r="28" fill="#F0FDF4" stroke="#16A34A" strokeWidth="2" />
+                  <text x="50" y={cy + 6} textAnchor="middle" fontSize="22">{stage.emoji}</text>
+                  <text
+                    x="95" y={cy - 4}
+                    fontSize="14"
+                    fontFamily="Poppins, sans-serif"
+                    fontWeight="600"
+                    fill="#1a1a1a"
+                  >
+                    {stage.label}
+                  </text>
+                  <text
+                    x="95" y={cy + 14}
+                    fontSize="11"
+                    fontFamily="Poppins, sans-serif"
+                    fill="#6b7280"
+                  >
+                    {stage.sublabel}
+                  </text>
+                </motion.g>
+              );
+            })}
+          </svg>
         </div>
 
         {/* Info cards */}

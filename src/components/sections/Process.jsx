@@ -74,7 +74,7 @@ export default function Process() {
         </motion.div>
 
         <div className="relative">
-          {/* Vertical progress line — desktop */}
+          {/* Vertical progress line — desktop (center) */}
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-100 -translate-x-1/2">
             <motion.div
               className="w-full origin-top"
@@ -87,7 +87,21 @@ export default function Process() {
             />
           </div>
 
-          <div className="space-y-10 md:space-y-0">
+          {/* Vertical progress line — mobile (left rail) */}
+          <div className="md:hidden absolute left-5 top-2 bottom-2 w-0.5 bg-gray-100 -translate-x-1/2">
+            <motion.div
+              className="w-full origin-top"
+              style={{
+                backgroundColor: '#16A34A',
+                scaleY: scrollYProgress,
+                transformOrigin: 'top',
+                height: '100%',
+              }}
+            />
+          </div>
+
+          {/* DESKTOP timeline */}
+          <div className="hidden md:block">
             {steps.map((step, i) => {
               const isLeft = i % 2 === 0;
               return (
@@ -97,46 +111,54 @@ export default function Process() {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ delay: 0.1 }}
-                  className={`md:flex items-center gap-8 md:mb-10 ${isLeft ? 'md:flex-row' : 'md:flex-row-reverse'}`}
+                  className={`flex items-center gap-8 mb-10 ${isLeft ? 'flex-row' : 'flex-row-reverse'}`}
                 >
-                  {/* Content */}
-                  <div className={`md:w-[calc(50%-2.5rem)] ${isLeft ? 'md:text-right' : 'md:text-left'}`}>
-                    <div
-                      className={`inline-flex items-center gap-2 mb-2 ${isLeft ? 'md:flex-row-reverse' : ''}`}
-                    >
-                      <span className="text-xs font-bold text-[#16A34A] uppercase tracking-widest">{step.timeline}</span>
-                    </div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                  <div className={`w-[calc(50%-2.5rem)] ${isLeft ? 'text-right' : 'text-left'}`}>
+                    <span className="text-xs font-bold text-[#16A34A] uppercase tracking-widest">{step.timeline}</span>
+                    <h3 className="text-lg font-bold text-gray-900 mt-1">
                       <span className="text-[#16A34A] mr-1">{step.num}.</span>
                       {step.title}
                     </h3>
                     <p className="text-gray-500 text-sm mt-1.5 leading-relaxed">{step.desc}</p>
                   </div>
 
-                  {/* Center circle */}
-                  <div className="hidden md:flex flex-shrink-0 w-10 h-10 rounded-full bg-[#16A34A] border-4 border-white shadow-md items-center justify-center text-lg z-10">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#16A34A] border-4 border-white shadow-md flex items-center justify-center text-lg z-10">
                     {step.icon}
                   </div>
 
-                  {/* Spacer on alternate side */}
-                  <div className="hidden md:block md:w-[calc(50%-2.5rem)]" />
-
-                  {/* Mobile layout */}
-                  <div className="md:hidden flex items-start gap-4">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#16A34A] flex items-center justify-center text-lg">
-                      {step.icon}
-                    </div>
-                    <div>
-                      <span className="text-xs font-bold text-[#16A34A] uppercase tracking-widest">{step.timeline}</span>
-                      <h3 className="text-base font-bold text-gray-900 mt-0.5">
-                        {step.num}. {step.title}
-                      </h3>
-                      <p className="text-gray-500 text-sm mt-1 leading-relaxed">{step.desc}</p>
-                    </div>
-                  </div>
+                  <div className="w-[calc(50%-2.5rem)]" />
                 </motion.div>
               );
             })}
+          </div>
+
+          {/* MOBILE timeline */}
+          <div className="md:hidden space-y-6">
+            {steps.map((step, i) => (
+              <motion.div
+                key={step.num}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.45, delay: i * 0.05 }}
+                className="relative flex items-start gap-4 pl-0"
+              >
+                {/* Node sitting on the rail */}
+                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-[#16A34A] border-4 border-white shadow-md flex items-center justify-center text-lg z-10">
+                  {step.icon}
+                </div>
+
+                {/* Card */}
+                <div className="flex-1 bg-white border border-gray-100 rounded-xl shadow-sm p-4">
+                  <span className="text-xs font-bold text-[#16A34A] uppercase tracking-widest">{step.timeline}</span>
+                  <h3 className="text-base font-bold text-gray-900 mt-0.5">
+                    <span className="text-[#16A34A] mr-1">{step.num}.</span>
+                    {step.title}
+                  </h3>
+                  <p className="text-gray-500 text-sm mt-1.5 leading-relaxed">{step.desc}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </div>

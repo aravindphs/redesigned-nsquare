@@ -26,7 +26,7 @@ export default function Hero() {
   return (
     <div
       className="relative min-h-screen flex items-center justify-center overflow-hidden"
-      style={{ background: 'linear-gradient(135deg, #0B1A12 0%, #0f2d1a 50%, rgba(22,163,74,0.15) 100%)' }}
+      style={{ background: 'linear-gradient(135deg, #0B1A12 0%, #0f2d1a 75%, rgba(22,163,74,0.12) 100%)' }}
     >
       {/* Animated sun rays */}
       <div
@@ -47,12 +47,12 @@ export default function Hero() {
         ))}
       </div>
 
-      {/* Green glow orb */}
+      {/* Green glow orb — pushed to the far right corner, smaller footprint */}
       <div
-        className="absolute top-1/4 right-1/4 w-96 h-96 rounded-full pointer-events-none"
+        className="absolute top-1/3 -right-20 w-64 h-64 rounded-full pointer-events-none hidden md:block"
         style={{
-          background: 'radial-gradient(circle, rgba(22,163,74,0.15) 0%, transparent 70%)',
-          filter: 'blur(40px)',
+          background: 'radial-gradient(circle, rgba(22,163,74,0.12) 0%, transparent 70%)',
+          filter: 'blur(50px)',
         }}
       />
 
