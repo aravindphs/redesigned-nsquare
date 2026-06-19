@@ -2,14 +2,69 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary meta -->
     <title>N Square Energies — Solar Installation Tamil Nadu</title>
     <meta name="description" content="Tamil Nadu's trusted solar EPC company. Residential, commercial and industrial solar installations. Get up to ₹78,000 PM Surya Ghar subsidy. MNRE Empanelled." />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta name="keywords" content="solar installation Tamil Nadu, PM Surya Ghar subsidy, TANGEDCO net metering, solar panels Coimbatore, MNRE empanelled solar" />
+    <meta name="author" content="N Square Energies" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="N Square Energies — Solar Installation Tamil Nadu" />
+    <meta property="og:description" content="Get up to ₹78,000 in PM Surya Ghar subsidy. Tamil Nadu's trusted solar EPC — residential, commercial, industrial. MNRE Empanelled." />
+    <meta property="og:url" content="https://nsquareenergies.com" />
+    <meta property="og:site_name" content="N Square Energies" />
+    <!-- TODO: Replace with actual OG image before launch -->
+    <meta property="og:image" content="https://nsquareenergies.com/og-image.jpg" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="N Square Energies — Solar Installation Tamil Nadu" />
+    <meta name="twitter:description" content="Get up to ₹78,000 in PM Surya Ghar subsidy. Tamil Nadu's trusted solar EPC." />
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#16A34A" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="N² Energies" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- TODO: Replace G-XXXXXXXXXX with your real GA4 Measurement ID before launch -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-XXXXXXXXXX');
+
+      // Conversion event helpers — call these from your form submit / CTA click handlers
+      window.trackEvent = function(eventName, params) {
+        if (typeof gtag !== 'undefined') gtag('event', eventName, params || {});
+      };
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Register service worker for PWA / offline support
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js');
+        });
+      }
+    </script>
   </body>
 </html>

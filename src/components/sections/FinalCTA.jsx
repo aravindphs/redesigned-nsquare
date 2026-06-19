@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { useCountdown } from '../../hooks/useCountdown';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 const SUBSIDY_DEADLINE = '2027-03-31T23:59:59+05:30';
 
@@ -18,18 +19,13 @@ function MiniTimeBox({ value, label }) {
 
 export default function FinalCTA() {
   const { days, hours, minutes, seconds } = useCountdown(SUBSIDY_DEADLINE);
+  const { t } = useLanguage();
 
   return (
-    <section
-      className="py-20 relative overflow-hidden"
-      style={{ backgroundColor: '#0B1A12' }}
-    >
-      {/* Decorative gradient */}
+    <section className="py-20 relative overflow-hidden" style={{ backgroundColor: '#0B1A12' }}>
       <div
         className="absolute inset-0 pointer-events-none"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(22,163,74,0.12) 0%, transparent 70%)',
-        }}
+        style={{ background: 'radial-gradient(ellipse at center, rgba(22,163,74,0.12) 0%, transparent 70%)' }}
       />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -40,28 +36,25 @@ export default function FinalCTA() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-[#DC2626]/20 border border-[#DC2626]/40 rounded-full mb-6">
             <span className="w-2 h-2 rounded-full bg-[#DC2626] animate-pulse" />
-            <span className="text-red-400 text-sm font-medium">Limited Time — Subsidy Window Closing</span>
+            <span className="text-red-400 text-sm font-medium">{t('finalCta.badge')}</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4">
-            Don't Miss the
-            <span style={{ color: '#16A34A' }}> Subsidy Window</span>
+            {t('finalCta.heading1')}
+            <span style={{ color: '#16A34A' }}>{t('finalCta.heading2')}</span>
           </h2>
-          <p className="text-gray-300 text-lg mb-8">
-            Secure your ₹78,000 PM Surya Ghar subsidy before March 31, 2027. Start with a free site visit today.
-          </p>
+          <p className="text-gray-300 text-lg mb-8">{t('finalCta.sub')}</p>
 
-          {/* Compact countdown */}
           <div className="mb-8">
-            <p className="text-white/50 text-xs uppercase tracking-widest mb-3">Time Remaining</p>
+            <p className="text-white/50 text-xs uppercase tracking-widest mb-3">{t('finalCta.timeRemaining')}</p>
             <div className="flex items-center justify-center gap-2 sm:gap-3">
-              <MiniTimeBox value={days} label="Days" />
+              <MiniTimeBox value={days}    label={t('finalCta.days')} />
               <span className="text-white/30 text-lg font-bold mb-4">:</span>
-              <MiniTimeBox value={hours} label="Hrs" />
+              <MiniTimeBox value={hours}   label={t('finalCta.hrs')} />
               <span className="text-white/30 text-lg font-bold mb-4">:</span>
-              <MiniTimeBox value={minutes} label="Min" />
+              <MiniTimeBox value={minutes} label={t('finalCta.min')} />
               <span className="text-white/30 text-lg font-bold mb-4">:</span>
-              <MiniTimeBox value={seconds} label="Sec" />
+              <MiniTimeBox value={seconds} label={t('finalCta.sec')} />
             </div>
           </div>
 
@@ -69,12 +62,10 @@ export default function FinalCTA() {
             onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
             className="px-10 py-5 bg-[#16A34A] text-white font-bold text-xl rounded-2xl hover:bg-green-600 transition-all transform hover:scale-105 shadow-2xl shadow-green-900/30"
           >
-            Book Free Site Visit →
+            {t('finalCta.cta')}
           </button>
 
-          <p className="text-gray-500 text-sm mt-4">
-            No commitment. Our engineer visits, assesses, and gives you a detailed quote — all free.
-          </p>
+          <p className="text-gray-500 text-sm mt-4">{t('finalCta.noCost')}</p>
         </motion.div>
       </div>
     </section>

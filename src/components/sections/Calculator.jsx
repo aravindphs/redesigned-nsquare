@@ -10,6 +10,7 @@ import {
   SUBSIDY,
 } from '../../constants/calculator';
 import PopupForm from '../ui/PopupForm';
+import { useLanguage } from '../../contexts/LanguageContext';
 
 function roundToHalf(n) {
   return Math.max(1, Math.round(n * 2) / 2);
@@ -51,6 +52,9 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
 export default function Calculator() {
+  const { t } = useLanguage();
+  const c = t('calculator');
+  const r = t('calculator.results');
   const [inputMode, setInputMode] = useState('bill'); // 'bill' | 'units'
   const [bill, setBill] = useState('');
   const [units, setUnits] = useState('');
@@ -108,14 +112,10 @@ export default function Calculator() {
           className="text-center mb-12"
         >
           <span className="inline-block px-3 py-1 bg-green-50 text-[#16A34A] text-sm font-semibold rounded-full mb-3">
-            Solar Calculator
+            {c?.badge}
           </span>
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">
-            Calculate Your Solar Savings
-          </h2>
-          <p className="text-gray-500 mt-3 max-w-xl mx-auto">
-            Enter your electricity details to get an instant estimate of your solar system size, savings, and payback period.
-          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">{c?.heading}</h2>
+          <p className="text-gray-500 mt-3 max-w-xl mx-auto">{c?.sub}</p>
         </motion.div>
 
         <div className="grid md:grid-cols-2 gap-8">
@@ -126,7 +126,7 @@ export default function Calculator() {
             viewport={{ once: true }}
             className="bg-gray-50 rounded-2xl p-6"
           >
-            <h3 className="font-bold text-gray-900 text-lg mb-5">Your Details</h3>
+            <h3 className="font-bold text-gray-900 text-lg mb-5">{c?.yourDetails}</h3>
             <form onSubmit={handleCalculate} className="space-y-4">
               {/* Input mode toggle */}
               <div className="flex rounded-lg overflow-hidden border border-gray-200">
@@ -141,14 +141,14 @@ export default function Calculator() {
                         : 'bg-white text-gray-500 hover:bg-gray-50'
                     }`}
                   >
-                    {mode === 'bill' ? 'Monthly Bill (₹)' : 'Monthly Units'}
+                    {mode === 'bill' ? c?.byBill : c?.byUnits}
                   </button>
                 ))}
               </div>
 
               {inputMode === 'bill' ? (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Monthly Electricity Bill</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{c?.billLabel}</label>
                   <div className="relative">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">₹</span>
                     <input
@@ -163,7 +163,7 @@ export default function Calculator() {
                 </div>
               ) : (
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Monthly Consumption</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">{c?.unitsLabel}</label>
                   <div className="relative">
                     <input
                       type="number"
@@ -179,15 +179,15 @@ export default function Calculator() {
               )}
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{c?.propertyLabel}</label>
                 <select
                   value={propertyType}
                   onChange={(e) => { setPropertyType(e.target.value); setShowResults(false); }}
                   className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#16A34A] text-gray-700 bg-white"
                 >
-                  <option value="Residential">Residential</option>
-                  <option value="Commercial">Commercial</option>
-                  <option value="Industrial">Industrial</option>
+                  <option value="Residential">{c?.residential}</option>
+                  <option value="Commercial">{c?.commercial}</option>
+                  <option value="Industrial">{c?.industrial}</option>
                 </select>
               </div>
 
@@ -195,13 +195,11 @@ export default function Calculator() {
                 type="submit"
                 className="w-full py-3 bg-[#16A34A] text-white font-bold rounded-xl hover:bg-green-700 transition-colors"
               >
-                Calculate Savings →
+                {c?.calculate}
               </button>
             </form>
 
-            <p className="text-xs text-gray-400 mt-4 leading-relaxed">
-              Estimates only. Final quote depends on site survey, roof type, and DISCOM approval.
-            </p>
+            <p className="text-xs text-gray-400 mt-4 leading-relaxed">{c?.disclaimer}</p>
           </motion.div>
 
           {/* Results panel */}
@@ -213,35 +211,33 @@ export default function Calculator() {
             {showResults && results ? (
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-3">
-                  <ResultCard label="Recommended System" value={`${results.systemKw} kW`} />
+                  <ResultCard label={r?.system} value={`${results.systemKw} kW`} />
                   {/* Total cost value kept hidden — revealed only after the user shares contact details */}
                   <button
                     type="button"
                     onClick={() => setShowCostPopup(true)}
                     className="rounded-xl p-4 bg-gray-50 text-left hover:bg-green-50 transition-colors group"
                   >
-                    <p className="text-xs font-medium uppercase tracking-wide text-gray-400">
-                      Total System Cost
-                    </p>
+                    <p className="text-xs font-medium uppercase tracking-wide text-gray-400">{r?.totalCost}</p>
                     <p className="text-base font-bold mt-1 text-[#16A34A] underline underline-offset-4 decoration-2 group-hover:text-green-700">
-                      Get total system cost →
+                      {r?.getCost}
                     </p>
                   </button>
                   {results.subsidy > 0 ? (
-                    <ResultCard label="PM Surya Ghar Subsidy" value={`-${formatINR(results.subsidy)}`} highlight />
+                    <ResultCard label={r?.subsidy} value={`-${formatINR(results.subsidy)}`} highlight />
                   ) : (
                     <div className="col-span-2 bg-blue-50 rounded-xl p-3 text-xs text-blue-700">
-                      No central subsidy for {propertyType}. Benefits include accelerated depreciation (up to 40% Y1) and net billing.
+                      {r?.noSubsidyNote?.replace('{type}', propertyType)}
                     </div>
                   )}
-                  <ResultCard label="Net Cost After Subsidy" value={formatINR(results.netCost)} />
-                  <ResultCard label="Monthly Savings" value={formatINR(results.monthlySavings)} />
-                  <ResultCard label="Payback Period" value={`${results.payback.toFixed(1)} years`} />
-                  <ResultCard label="25-Year Net Savings" value={formatINR(results.totalSavings25)} highlight />
+                  <ResultCard label={r?.netCost} value={formatINR(results.netCost)} />
+                  <ResultCard label={r?.monthlySavings} value={formatINR(results.monthlySavings)} />
+                  <ResultCard label={r?.payback} value={`${results.payback.toFixed(1)} years`} />
+                  <ResultCard label={r?.savings25} value={formatINR(results.totalSavings25)} highlight />
                 </div>
 
                 <div className="bg-gray-50 rounded-2xl p-4">
-                  <p className="text-sm font-semibold text-gray-700 mb-3">Cumulative Savings Over 25 Years</p>
+                  <p className="text-sm font-semibold text-gray-700 mb-3">{r?.chartTitle}</p>
                   <ResponsiveContainer width="100%" height={180}>
                     <BarChart data={results.chartData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
@@ -259,31 +255,27 @@ export default function Calculator() {
                       </Bar>
                     </BarChart>
                   </ResponsiveContainer>
-                  <p className="text-xs text-gray-400 mt-2">
-                    Red bars = before payback period. Green bars = pure savings.
-                  </p>
+                  <p className="text-xs text-gray-400 mt-2">{r?.chartNote}</p>
                 </div>
 
                 <button
                   onClick={() => document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' })}
                   className="w-full py-3 bg-[#16A34A] text-white font-bold rounded-xl hover:bg-green-700 transition-colors"
                 >
-                  Get Exact Quote →
+                  {r?.getQuote}
                 </button>
               </div>
             ) : (
               <div className="h-full min-h-[300px] bg-gradient-to-br from-green-50 to-green-100 rounded-2xl flex flex-col items-center justify-center text-center p-8">
-                <div className="text-6xl mb-4">☀️</div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">See Your Savings</h3>
-                <p className="text-gray-500 text-sm">
-                  Enter your electricity bill or monthly units on the left to calculate your potential solar savings.
-                </p>
+                <div className="text-6xl mb-4" aria-hidden="true">☀️</div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{r?.seeYourSavings}</h3>
+                <p className="text-gray-500 text-sm">{r?.enterPrompt}</p>
                 <div className="mt-6 grid grid-cols-2 gap-3 w-full max-w-xs">
                   {[
-                    { label: 'Avg. Unit Rate', value: `₹${UNIT_RATE}/unit` },
-                    { label: 'Cost Per kW', value: `₹${(COST_PER_KW / 1000).toFixed(0)}K` },
-                    { label: 'Max Subsidy', value: '₹78,000' },
-                    { label: 'Output/kW', value: `${UNITS_PER_KW_PER_MONTH} units/mo` },
+                    { label: r?.unitRate,   value: `₹${UNIT_RATE}/unit` },
+                    { label: r?.costPerKw,  value: `₹${(COST_PER_KW / 1000).toFixed(0)}K` },
+                    { label: r?.maxSubsidy, value: '₹78,000' },
+                    { label: r?.outputPerKw, value: `${UNITS_PER_KW_PER_MONTH} units/mo` },
                   ].map(({ label, value }) => (
                     <div key={label} className="bg-white rounded-xl p-3">
                       <p className="text-xs text-gray-400">{label}</p>
