@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --color-primary: #16A34A;
+    --color-accent: #DC2626;
+    --color-dark: #0B1A12;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #FAFAFA;
+    color: #1a1a1a;
+    margin: 0;
+  }
+
+  #root {
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+  }
+}
+
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+@keyframes sunRay {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+  50% { box-shadow: 0 0 0 20px rgba(22, 163, 74, 0); }
+}
+
+.ripple-ring {
+  animation: ripple 4s ease-out infinite;
+}
+
+.ripple-ring-delay {
+  animation: ripple 4s ease-out infinite 2s;
+}
+
+.sun-ray-anim {
+  animation: sunRay 20s linear infinite;
+}
